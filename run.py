@@ -33,10 +33,10 @@ class Board():
         self.name = name
         self.num_ships = num_ships
 
-        self.board = [["~" for x in range(size)] for y in range(size)]
+        self.board = f"{self.name}'s board will be {self.size} spaces big and have {self.num_ships} ships."
 
-    def print_board(self, board):
-        print(board)
+    def print_board(self):
+        print(self.board)
 
     def place_ship(self):
         print(self)
@@ -71,7 +71,7 @@ def get_name():
 
 
 def choose_difficulty():
-    print("\nChoose your difficulty!\n Enter 'e' for Easy, 'm' for Medium, 'h' for Hard\n")
+    print("\nChoose your difficulty!\n\nEnter 'e' for Easy, 'm' for Medium, 'h' for Hard\n")
 
     while True:
         try:
@@ -86,12 +86,28 @@ def choose_difficulty():
             print("Please try again.")
 
 
+def game_init(difficulty, name):
+    if difficulty == "e":
+        player_board = Board(5, name, 4)
+        return player_board
+    elif difficulty == "m":
+        player_board = Board(7, name, 6)
+        return player_board
+    elif difficulty == "h":
+        player_board = Board(9, name, 8)
+        return player_board
+    else:
+        print("Error")
+
+
 def game_loop():
     clear_term()
     print_start()
     print_rules()
-    print(f"\nWelcome to the game {get_name()}")
-    print(choose_difficulty())
+    name = get_name()
+    print(f"\nWelcome to the game {name}")
+    stuff = game_init(choose_difficulty(), name)
+    stuff.print_board()
 
 
 game_loop()
