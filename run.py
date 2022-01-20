@@ -63,11 +63,16 @@ def print_rules():
     rules = "\n** HOW TO PLAY **\n" + "\nType our name into the field below\n" + "Select your Difficulty\n" + "Place your ships\n" + "Fire missiles at your opponents ships\n" + "Winner is first to clear all enemy ships\n"
     print(rules)
 
+def get_name():
+    player_name = input("Please enter your name: ")
+
+    return player_name
+
 
 def game_loop():
     clear_term()
     print_start()
     print_rules()
-
+    print(f"Welcome to the game {get_name()}")
 
 game_loop()
