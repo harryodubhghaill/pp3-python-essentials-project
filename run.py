@@ -63,16 +63,35 @@ def print_rules():
     rules = "\n** HOW TO PLAY **\n" + "\nType our name into the field below\n" + "Select your Difficulty\n" + "Place your ships\n" + "Fire missiles at your opponents ships\n" + "Winner is first to clear all enemy ships\n"
     print(rules)
 
+
 def get_name():
     player_name = input("Please enter your name: ")
 
     return player_name
 
 
+def choose_difficulty():
+    print("\nChoose your difficulty!\n Enter 'e' for Easy, 'm' for Medium, 'h' for Hard\n")
+
+    while True:
+        try:
+            difficulty = input("Enter Difficulty Level: ")
+
+            difficulty_options = ("e", "m", "h")
+            if difficulty in difficulty_options:
+                return difficulty
+            else:
+                print("Sorry, that's not an accepted value! Please try again")
+        except ValueError:
+            print("Please try again.")
+
+
 def game_loop():
     clear_term()
     print_start()
     print_rules()
-    print(f"Welcome to the game {get_name()}")
+    print(f"\nWelcome to the game {get_name()}")
+    print(choose_difficulty())
+
 
 game_loop()
