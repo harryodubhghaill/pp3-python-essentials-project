@@ -42,10 +42,6 @@ class Board():
         print(self)
 
 
-# player_board = Board(9, player, 5)
-
-# player_board.print_board()
-
 # utility function to clear terminal
 def clear_term():
     command = 'clear'
@@ -104,10 +100,11 @@ def game_loop():
     clear_term()
     print_start()
     print_rules()
-    name = get_name()
-    print(f"\nWelcome to the game {name}")
-    stuff = game_init(choose_difficulty(), name)
-    stuff.print_board()
+    player_name = get_name()
+    print(f"\nWelcome to the game {player_name}")
+    player_difficulty = choose_difficulty()
+    player_board = game_init(player_difficulty, player_name)
+    player_board.print_board()
 
 
 game_loop()
