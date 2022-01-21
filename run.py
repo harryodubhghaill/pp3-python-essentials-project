@@ -42,6 +42,21 @@ class Board():
         for r in range(self.size):
             print(str(r + 1) + " " + " ".join(str(c) for c in self.board[r]))
 
+    def coords_guess(self, field):
+        while True:
+            try:
+                guess = int(input(f"{field} Guess: "))
+                if guess in range(1, self.size + 1):
+                    return guess - 1
+                else:
+                    print("\nOops, that's not even in the ocean.")
+            except ValueError:
+                print("\nPlease enter a number")
+
+    def update_board(self, guess):
+        self.board[guess[0]][guess[1]] = '*'
+        print(f"{self.name}'s board updated")
+
     def place_ship(self):
         print(self)
 
@@ -110,6 +125,11 @@ def game_loop():
     player_board = game_init(player_difficulty, player_name)
     computer_board = game_init(player_difficulty, "Computer")
     player_board.print_board()
+    computer_board.print_board()
+    row_guess = computer_board.coords_guess("Row")
+    col_guess = computer_board.coords_guess("Column")
+    guess = row_guess, col_guess
+    computer_board.update_board(guess)
     computer_board.print_board()
 
 
