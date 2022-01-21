@@ -34,15 +34,25 @@ class Board():
         self.num_ships = num_ships
 
         self.title = f"\n{self.name}'s board"
+
+        # creates styled line to print
         self.board = [["~"] * self.size for x in range(self.size)]
 
     def print_board(self):
+        """
+        Takes size and name from class to print styled and indexed play
+        board.
+        """
         print(self.title)
         print("\n  " + " ".join(str(x) for x in range(1, self.size + 1)))
         for r in range(self.size):
             print(str(r + 1) + " " + " ".join(str(c) for c in self.board[r]))
 
     def coords_guess(self, field):
+        """
+        Function to get guess from player. Field param is used to
+        alternate use case.
+        """
         while True:
             try:
                 guess = int(input(f"{field} Guess: "))
@@ -54,6 +64,9 @@ class Board():
                 print("\nPlease enter a number")
 
     def update_board(self, guess):
+        """
+        Takes guess and updates board to reflect.
+        """
         self.board[guess[0]][guess[1]] = '*'
         print(f"{self.name}'s board updated")
 
@@ -70,12 +83,12 @@ def clear_term():
 
 
 def print_start():
-    start_screen = ("~"*50)+"\n"+("~"*50) + "\n~~~~~~     WELCOME TO BATTLESHIP ROYAL      ~~~~~~\n"+ "~~  OBJECTIVE: TOTAL DESTRUCTION OF YOUR ENEMY  ~~\n" + ("~"*50)+"\n"+("~"*50)
+    start_screen = ("~"*50)+"\n"+("~"*50) + "\n~~~~~~     WELCOME TO BATTLESHIP ROYAL      ~~~~~~\n" + "~~  OBJECTIVE: TOTAL DESTRUCTION OF YOUR ENEMY  ~~\n" + ("~"*50)+"\n"+("~"*50)
     print(start_screen)
 
 
 def print_rules():
-    rules = "\n** HOW TO PLAY **\n" + "\nType our name into the field below\n" + "Select your Difficulty\n" + "Place your ships\n" + "Fire missiles at your opponents ships\n" + "Winner is first to clear all enemy ships\n"
+    rules = "\n** HOW TO PLAY **\n" + "\nType your name into the field below\n" + "Select your Difficulty\n" + "Place your ships\n" + "Fire missiles at your opponents ships\n" + "Winner is first to clear all enemy ships\n"
     print(rules)
 
 
@@ -86,7 +99,8 @@ def get_name():
 
 
 def choose_difficulty():
-    print("\nChoose your difficulty!\n\nEnter 'e' for Easy, 'm' for Medium, 'h' for Hard\n")
+    print("\nChoose your difficulty!\n")
+    print("\nEnter 'e' for Easy, 'm' for Medium, 'h' for Hard\n")
 
     while True:
         try:
