@@ -33,10 +33,14 @@ class Board():
         self.name = name
         self.num_ships = num_ships
 
-        self.board = f"{self.name}'s board will be {self.size} spaces big and have {self.num_ships} ships."
+        self.title = f"\n{self.name}'s board"
+        self.board = [["~"] * self.size for x in range(self.size)]
 
     def print_board(self):
-        print(self.board)
+        print(self.title)
+        print("\n  " + " ".join(str(x) for x in range(1, self.size + 1)))
+        for r in range(self.size):
+            print(str(r + 1) + " " + " ".join(str(c) for c in self.board[r]))
 
     def place_ship(self):
         print(self)
@@ -104,7 +108,9 @@ def game_loop():
     print(f"\nWelcome to the game {player_name}")
     player_difficulty = choose_difficulty()
     player_board = game_init(player_difficulty, player_name)
+    computer_board = game_init(player_difficulty, "Computer")
     player_board.print_board()
+    computer_board.print_board()
 
 
 game_loop()
