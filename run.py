@@ -6,8 +6,8 @@ class Ship():
     Defines Ship class with properties for placement and methods
     to track position and status
     """
-    def __init__(self, size, orientation, start_coord, boat_type):
-        self.size = size
+    def __init__(self, size, orientation, start_coord):
+        self.boat_size = size
 
         if orientation == 'h' or orientation == 'v':  # value check
             self.orientation = orientation
@@ -16,10 +16,29 @@ class Ship():
 
         self.start = start_coord
 
-        self.boat_type = boat_type
-
-    def get_coords(self, size):
-        print(size)
+    def get_coords(self):
+        if self.orientation == 'h':
+            if self.start[0] in range(0,6):
+                self.coordinates = []
+                for index in range(self.boat_size):
+                    if self.start[1] + index in range(0,6):
+                        self.coordinates.append({'row': self.start[0], 'col': self.start[1] + index})
+                    else:
+                        raise IndexError("Column is out of range.")
+                return self.coordinates
+            else:
+                raise IndexError("Row is out of range.")
+        elif self.orientation == 'v':
+            if self.start[0] in range(0,6):
+                self.coordinates = []
+                for index in range(self.boat_size):
+                    if self.start[1] + index in range(0,6):
+                        self.coordinates.append({'row': self.start[0] + index, 'col': self.start[1]})
+                    else:
+                        raise IndexError("Row is out of range.")
+                return self.coordinates
+            else:
+                raise IndexError("Column is out of range.")
 
 
 class Board():
@@ -37,6 +56,7 @@ class Board():
 
         # creates styled line to print
         self.board = [["~"] * self.size for x in range(self.size)]
+        self.logic_board = ([0] * self.size for x in range(self.size))
 
     def print_board(self):
         """
@@ -63,15 +83,34 @@ class Board():
             except ValueError:
                 print("\nPlease enter a number")
 
-    def update_board(self, guess):
+    def update_board(self, guess, symbol):
         """
         Takes guess and updates board to reflect.
         """
-        self.board[guess[0]][guess[1]] = '*'
+        self.board[guess['row']][guess['col']] = f'{symbol}'
         print(f"{self.name}'s board updated")
 
-    def place_ship(self):
-        print(self)
+    def check_hit(self, ship_coords, guess_coords):
+        if guess_coords in ship_coords:
+            self.update_board(guess_coords, "X")
+            print("Hit!")
+        else:
+            self.update_board(guess_coords, 'O')
+            print("Miss!")
+
+    # def update_ship(self, guess):
+    #     """
+    #     Takes guess and updates board to reflect.
+    #     """
+    #     self.logic_board[guess[0]][guess[1]] = 1
+    #     print(f"{self.name}'s logic board updated")
+
+    # def get_logic_board(self):
+    #     board = list(map(int, self.logic_board))
+    #     return board
+
+    # def place_ship(self):
+    #     print(self)
 
 
 # utility function to clear terminal
@@ -129,6 +168,21 @@ def game_init(difficulty, name):
         print("Error")
 
 
+def get_orientation():
+    print("\nChoose Ship Orientation. Type 'h' for horizontal or 'v' for vertical.\n")
+    try:
+        orientation = input("Select Orientation: ")
+        if orientation in ("h", "v"):
+            return orientation
+        else:
+            print("\nThat's an interesting direction! Try again.")
+    except ValueError:
+        print("\nPlease enter either 'h' or 'v'")
+
+    return orientation
+
+
+
 def game_loop():
     clear_term()
     print_start()
@@ -143,8 +197,24 @@ def game_loop():
     row_guess = computer_board.coords_guess("Row")
     col_guess = computer_board.coords_guess("Column")
     guess = row_guess, col_guess
-    computer_board.update_board(guess)
+    # computer_board.update_board(guess, *)
+    # computer_board.print_board()
+    orientation_guess = get_orientation()
+    # player_logic_board = player_board.get_logic_board()
+    # computer_logic_board = computer_board.get_logic_board()
+    # print(player_logic_board)
+    # print(computer_logic_board)
+    # player_logic_board.update_ship(guess)
+    # print(player_logic_board)
+    carrier = Ship(6, orientation_guess, guess)
+    carrier_coords = carrier.get_coords()
+    print(carrier_coords)
+    ship_row_guess = computer_board.coords_guess("Row")
+    ship_col_guess = computer_board.coords_guess("Col")
+    coord = {'row': ship_row_guess, 'col': ship_col_guess}
+    computer_board.check_hit(carrier_coords, coord)
     computer_board.print_board()
+
 
 
 game_loop()
