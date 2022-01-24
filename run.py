@@ -6,9 +6,9 @@ class Ship():
     Defines Ship class with properties for placement and methods
     to track position and status
     """
-    def __init__(self, size, orientation, start_coord):
+    def __init__(self, size, orientation, start_coord, boat_name):
         self.boat_size = size
-
+        self.boat_name = boat_name
         if orientation == 'h' or orientation == 'v':  # value check
             self.orientation = orientation
         else:
@@ -30,10 +30,10 @@ class Ship():
             else:
                 raise IndexError("Row is out of range.")
         elif self.orientation == 'v':
-            if self.start['row'] in range(board_size):
+            if self.start['col'] in range(board_size):
                 coordinates = []
                 for index in range(self.boat_size):
-                    if self.start['col'] + index in range(board_size):
+                    if self.start['row'] + index in range(board_size):
                         coordinates.append({'row': self.start['row'] + index,
                                             'col': self.start['col']})
                     else:
@@ -88,10 +88,7 @@ class Board():
         """
         Takes guess and updates board to reflect.
         """
-        print(guess)
         for coord in guess:
-            print(coord)
-            print('hello')
             self.board[coord['row']][coord['col']] = f'{symbol}'
 
         print(f"{self.name}'s board updated")
@@ -165,6 +162,59 @@ def board_init(difficulty, name):
         print("Error")
 
 
+def place_ships(difficulty, board):
+    if difficulty == "e":
+        cruiser_coords = get_ship_info(board, 4, 'Cruiser')
+        board.update_board(cruiser_coords, '@')
+        board.print_board()
+        destroyer_coords = get_ship_info(board, 3, 'Destroyer')
+        board.update_board(destroyer_coords, '@')
+        board.print_board()
+        patrol_boat_coords = get_ship_info(board, 2, 'Patrol Boat')
+        board.update_board(patrol_boat_coords, '@')
+        board.print_board()
+        scuba_spy_coords = get_ship_info(board, 1, 'Jeff')
+        board.update_board(scuba_spy_coords, '@')
+        board.print_board()
+    elif difficulty == "m":
+        battleship_coords = get_ship_info(board, 5, 'Battleship')
+        board.update_board(battleship_coords, '@')
+        board.print_board()
+        cruiser_coords = get_ship_info(board, 4, 'Cruiser')
+        board.update_board(cruiser_coords, '@')
+        board.print_board()
+        destroyer_coords = get_ship_info(board, 3, 'Destroyer')
+        board.update_board(destroyer_coords, '@')
+        board.print_board()
+        patrol_boat_coords = get_ship_info(board, 2, 'Patrol Boat')
+        board.update_board(patrol_boat_coords, '@')
+        board.print_board()
+        scuba_spy_coords = get_ship_info(board, 1, 'Jeff')
+        board.update_board(scuba_spy_coords, '@')
+        board.print_board()
+    elif difficulty == "h":
+        carrier_coords = get_ship_info(board, 6, 'Carrier')
+        board.update_board(carrier_coords, '@')
+        board.print_board()
+        battleship_coords = get_ship_info(board, 5, 'Battleship')
+        board.update_board(battleship_coords, '@')
+        board.print_board()
+        cruiser_coords = get_ship_info(board, 4, 'Cruiser')
+        board.update_board(cruiser_coords, '@')
+        board.print_board()
+        destroyer_coords = get_ship_info(board, 3, 'Destroyer')
+        board.update_board(destroyer_coords, '@')
+        board.print_board()
+        patrol_boat_coords = get_ship_info(board, 2, 'Patrol Boat')
+        board.update_board(patrol_boat_coords, '@')
+        board.print_board()
+        scuba_spy_coords = get_ship_info(board, 1, 'Jeff')
+        board.update_board(scuba_spy_coords, '@')
+        board.print_board()
+    else:
+        print("Error")
+
+
 def get_orientation():
     print("\nChoose Ship Orientation.")
     print("\nType 'h' for horizontal or 'v' for vertical.\n")
@@ -191,25 +241,30 @@ def get_guess(board):
     return guess
 
 
-def get_ship_info(board):
+list_ship_coords = []
+
+
+def get_ship_info(board, boat_size, boat_name):
+    print(f"Place your {boat_name}.")
+    print(f"Your {boat_name} is {boat_size} units long.")
     while True:
         try:
             orientation_guess = get_orientation()
             guess = get_guess(board)
             board_size = board.size
-            carrier = Ship(4, orientation_guess, guess)
-            carrier_coords = carrier.get_coords(board_size)
-            break
+            ship = Ship(boat_size, orientation_guess, guess, boat_name)
+            instance_coords = ship.get_coords(board_size)
+            for instance_coord in instance_coords:
+                print(instance_coord)
+                if instance_coord in list_ship_coords:
+                    raise IndexError
+                else:
+                    list_ship_coords.append(instance_coords)
+                    # print(list_ship_coords)
+                    return instance_coords
         except IndexError:
             print("Your ship aint gonna fit there bud")
             print("Try again")
-    return carrier_coords
-#  Ship instance definitions
-#  battleship = Ship(5, orientation_guess, guess)
-#  cruiser = Ship(4, orientation_guess, guess)
-#  destroyer = Ship(3, orientation_guess, guess)
-#  patrol_boat = Ship(2, orientation_guess, guess)
-#  scuba_spy = Ship(1, orientation_guess, guess)
 
 
 def game_loop():
@@ -220,9 +275,8 @@ def game_loop():
     computer_board = board_init(difficulty, "Computer")
     player_board.print_board()
     computer_board.print_board()
-    carrier_coords = get_ship_info(computer_board)
-    computer_board.update_board(carrier_coords, '@')
-    computer_board.print_board()
+    place_ships(difficulty, player_board)
+
     # coord = get_guess(computer_board)
     # computer_board.check_hit(carrier_coords, coord)
     # computer_board.print_board()
