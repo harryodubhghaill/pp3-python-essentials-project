@@ -255,13 +255,12 @@ def get_ship_info(board, boat_size, boat_name):
             ship = Ship(boat_size, orientation_guess, guess, boat_name)
             instance_coords = ship.get_coords(board_size)
             for instance_coord in instance_coords:
-                print(instance_coord)
-                if instance_coord in list_ship_coords:
+                unpacked_coord = instance_coord['row'], instance_coord['col']
+                if unpacked_coord in list_ship_coords:
                     raise IndexError
                 else:
-                    list_ship_coords.append(instance_coords)
-                    # print(list_ship_coords)
-                    return instance_coords
+                    list_ship_coords.append(unpacked_coord)
+            return instance_coords
         except IndexError:
             print("Your ship aint gonna fit there bud")
             print("Try again")
