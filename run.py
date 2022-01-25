@@ -1,3 +1,4 @@
+from random import randint
 import os
 
 
@@ -49,10 +50,9 @@ class Board():
     ships depending on difficulty. Takes name parameter to differentiate
     comp vs player board.
     """
-    def __init__(self, size, name, num_ships):
+    def __init__(self, size, name):
         self.size = size
         self.name = name
-        self.num_ships = num_ships
 
         self.title = f"\n{self.name}'s board"
 
@@ -88,30 +88,31 @@ class Board():
         """
         Takes guess and updates board to reflect.
         """
-        print(guess)
         for coord in guess:
-            print(coord)
             self.board[coord[0]][coord[1]] = f'{symbol}'
 
         print(f"{self.name}'s board updated")
 
-    def check_hit(self, ship_coords, guess_coords, used):
-        if guess_coords in used:
-            print("\nYou guessed that one already.")
-        else:
-            if guess_coords in ship_coords:
-                self.update_board([guess_coords], 'X')
-                print("Hit!")
-                list_ship_coords.remove(guess_coords)
+    def check_hit(self, ship_coords, guess_coords, used, data_set):
+        try:
+            if guess_coords in used:
+                print("\nYou guessed that one already.")
             else:
-                self.update_board([guess_coords], 'O')
-                print("Miss!")
+                if guess_coords in ship_coords:
+                    self.update_board([guess_coords], 'X')
+                    print("Hit!")
+                    data_set.remove(guess_coords)
+                else:
+                    self.update_board([guess_coords], 'O')
+                    print("Miss!")
+        except ValueError:
+            print("failure")
 
-            print(guess_coords)
 
-
-# utility function to clear terminal
 def clear_term():
+    """
+    Utility function to clear terminal.
+    """
     command = 'clear'
     if os.name in ('nt', 'dos'):  # check for os
         command = 'cls'
@@ -119,6 +120,9 @@ def clear_term():
 
 
 def print_start():
+    """
+    Prints stylized strings introducing the game to terminal.
+    """
     print(("~"*50)+"\n"+("~"*50))
     print("~~~~~~     WELCOME TO BATTLESHIP ROYAL      ~~~~~~")
     print("~~  OBJECTIVE: TOTAL DESTRUCTION OF YOUR ENEMY  ~~")
@@ -131,12 +135,19 @@ def print_start():
 
 
 def get_name():
+    """
+    Gets the players name through terminal input.
+    """
     player_name = input("Please enter your name: ")
     print(f"\nWelcome to the game {player_name}")
     return player_name
 
 
 def choose_difficulty():
+    """
+    Prompts player to select one of the difficulty modes.
+    Checks user input and returns difficulty value.
+    """
     print("\nChoose your difficulty!")
     print("\nEnter 'e' for Easy, 'm' for Medium, 'h' for Hard\n")
 
@@ -154,20 +165,32 @@ def choose_difficulty():
 
 
 def board_init(difficulty, name):
+    """
+    Takes chosen difficulty and name and passes it to
+    the Board class to create an instance
+    """
     if difficulty == "e":
-        player_board = Board(5, name, 4)
-        return player_board
+        generated_board = Board(5, name)
+        return generated_board
     elif difficulty == "m":
-        player_board = Board(7, name, 6)
-        return player_board
+        generated_board = Board(7, name)
+        return generated_board
     elif difficulty == "h":
-        player_board = Board(9, name, 8)
-        return player_board
+        generated_board = Board(9, name)
+        return generated_board
     else:
         print("Error")
 
 
 def place_ships(difficulty, board):
+    """
+    Takes difficulty param to select list of ships.
+    Board param is for where ships are to be placed.
+    We call the get_ship_info func to create our
+    ship instances and get list of coordinates.
+    Coordinates are then used to update display board
+    and print updated board to terminal.
+    """
     if difficulty == "e":
         cruiser_coords = get_ship_info(board, 4, 'Cruiser')
         board.update_board(cruiser_coords, '@')
@@ -175,12 +198,12 @@ def place_ships(difficulty, board):
         destroyer_coords = get_ship_info(board, 3, 'Destroyer')
         board.update_board(destroyer_coords, '@')
         board.print_board()
-        # patrol_boat_coords = get_ship_info(board, 2, 'Patrol Boat')
-        # board.update_board(patrol_boat_coords, '@')
-        # board.print_board()
-        # scuba_spy_coords = get_ship_info(board, 1, 'Jeff')
-        # board.update_board(scuba_spy_coords, '@')
-        # board.print_board()
+        patrol_boat_coords = get_ship_info(board, 2, 'Patrol Boat')
+        board.update_board(patrol_boat_coords, '@')
+        board.print_board()
+        scuba_spy_coords = get_ship_info(board, 1, 'Jeff')
+        board.update_board(scuba_spy_coords, '@')
+        board.print_board()
     elif difficulty == "m":
         battleship_coords = get_ship_info(board, 5, 'Battleship')
         board.update_board(battleship_coords, '@')
@@ -192,6 +215,9 @@ def place_ships(difficulty, board):
         board.update_board(destroyer_coords, '@')
         board.print_board()
         patrol_boat_coords = get_ship_info(board, 2, 'Patrol Boat')
+        board.update_board(patrol_boat_coords, '@')
+        board.print_board()
+        rescue_boat_coords = get_ship_info(board, 2, 'Rescue Boat')
         board.update_board(patrol_boat_coords, '@')
         board.print_board()
         scuba_spy_coords = get_ship_info(board, 1, 'Jeff')
@@ -210,8 +236,14 @@ def place_ships(difficulty, board):
         destroyer_coords = get_ship_info(board, 3, 'Destroyer')
         board.update_board(destroyer_coords, '@')
         board.print_board()
+        submarine_coords = get_ship_info(board, 3, 'Submarine')
+        board.update_board(submarine_coords, '@')
+        board.print_board()
         patrol_boat_coords = get_ship_info(board, 2, 'Patrol Boat')
         board.update_board(patrol_boat_coords, '@')
+        board.print_board()
+        rescue_boat_coords = get_ship_info(board, 2, 'Rescue Boat')
+        board.update_board(rescue_boat_coords, '@')
         board.print_board()
         scuba_spy_coords = get_ship_info(board, 1, 'Jeff')
         board.update_board(scuba_spy_coords, '@')
@@ -221,6 +253,10 @@ def place_ships(difficulty, board):
 
 
 def get_orientation():
+    """
+    Prompts player to choose orientation of ship.
+    Checks user input and returns orientation value.
+    """
     print("\nChoose Ship Orientation.")
     print("\nType 'h' for horizontal or 'v' for vertical.\n")
     while True:
@@ -235,11 +271,17 @@ def get_orientation():
 
 
 def game_init():
+    """
+    Clears terminal and prints start screen.
+    """
     clear_term()
     print_start()
 
 
 def get_guess(board):
+    """
+    Board param is for board we want to guess on.
+    """
     row_guess = board.coords_guess("Row")
     col_guess = board.coords_guess("Column")
     guess = (row_guess, col_guess)
@@ -247,9 +289,17 @@ def get_guess(board):
 
 
 list_ship_coords = []
+comp_list_ship_coords = []
 
 
 def get_ship_info(board, boat_size, boat_name):
+    """
+    Creates instances of Ship Class.
+    Calls funtions to get player inputs.
+    Generates coordinates for each Ship instance.
+    Checks for occupied cells.
+    If instance coordinates unique, return instance coordinates.
+    """
     print(f"Place your {boat_name}.")
     print(f"Your {boat_name} is {boat_size} units long.")
     while True:
@@ -271,20 +321,124 @@ def get_ship_info(board, boat_size, boat_name):
 
 
 guessed_values = []
+comp_guessed_values = []
 
 
-def fire_missile(board, ship_coords):
+def fire_missile(board, ship_coords, data_set, missile_coords, guessed):
+    board.check_hit(ship_coords, missile_coords, guessed, data_set)
+    guessed.append(missile_coords)
+    board.print_board()
+    print(data_set)
+    print(guessed)
+
+
+def turn(player_board, computer_board):
     while True:
-        if ship_coords:
-            print(ship_coords)
-            coord = get_guess(board)
-            board.check_hit(ship_coords, coord, guessed_values)
-            guessed_values.append(coord)
-            board.print_board()
-            print(ship_coords)
+        if comp_list_ship_coords:
+            player_turn(computer_board, comp_list_ship_coords)
+            if list_ship_coords:
+                comp_turn(player_board, list_ship_coords)
+            else:
+                print("Computer Wins")
         else:
-            print("game over")
+            print("Player Wins")
             break
+
+
+def player_turn(board, ship_coords):
+    while True:
+        try:
+            coord = get_guess(board)
+            clear_term()
+            if coord in guessed_values:
+                raise IndexError
+            else:
+                fire_missile(board, ship_coords, comp_list_ship_coords, coord,
+                             guessed_values)
+                break
+        except IndexError:
+            print("You Picked that one already")
+            print("Try again")
+
+
+def comp_turn(board, ship_coords):
+    while True:
+        try:
+            data = random_parameters(board)
+            coord = data[1]
+            if coord in comp_guessed_values:
+                raise IndexError
+            else:
+                fire_missile(board, ship_coords, list_ship_coords, coord,
+                             comp_guessed_values)
+                break
+        except IndexError:
+            print("trying again...")
+
+
+def random_parameters(board):
+    orientation = 'h' if randint(0, 1) == 0 else 'v'
+    coords = (randint(0, board.size - 1), randint(0, board.size - 1))
+    return orientation, coords
+
+
+def generate_coords(board, boat_size, boat_name):
+    """
+    Creates instances of Ship Class.
+    Calls random_parameters func to pass
+    params to Ship instance.
+    Generates coordinates for each Ship instance.
+    Checks for occupied cells.
+    If instance coordinates unique, return instance coordinates.
+    """
+    while True:
+        try:
+            parameters = random_parameters(board)
+            orientation_guess = parameters[0]
+            guess = parameters[1]
+            board_size = board.size
+            ship = Ship(boat_size, orientation_guess, guess, boat_name)
+            instance_coords = ship.get_coords(board_size)
+            for instance_coord in instance_coords:
+                if instance_coord in comp_list_ship_coords:
+                    raise IndexError
+                else:
+                    comp_list_ship_coords.append(instance_coord)
+            return instance_coords
+        except IndexError:
+            continue
+
+
+def generate_ships(difficulty, board):
+    """
+    Takes difficulty param to select list of ships.
+    Board param is for where ships are to be placed.
+    We call the generate_coords func to randomly generate
+    parameters.
+    """
+    if difficulty == "e":
+        generate_coords(board, 4, 'Cruiser')
+        generate_coords(board, 3, 'Destroyer')
+        generate_coords(board, 2, 'Patrol Boat')
+        generate_coords(board, 1, 'Jeff')
+    elif difficulty == "m":
+        generate_coords(board, 5, 'Battleship')
+        generate_coords(board, 4, 'Cruiser')
+        generate_coords(board, 3, 'Destroyer')
+        generate_coords(board, 2, 'Patrol Boat')
+        generate_coords(board, 2, 'Rescue Boat')
+        generate_coords(board, 1, 'Jeff')
+    elif difficulty == "h":
+        generate_coords(board, 6, 'Carrier')
+        generate_coords(board, 5, 'Battleship')
+        generate_coords(board, 4, 'Cruiser')
+        generate_coords(board, 3, 'Destroyer')
+        generate_coords(board, 3, 'Submarine')
+        generate_coords(board, 2, 'Patrol Boat')
+        generate_coords(board, 2, 'Rescue Boat')
+        generate_coords(board, 1, 'Jeff')
+    else:
+        print("Error")
 
 
 def game_loop():
@@ -292,13 +446,11 @@ def game_loop():
     player_name = get_name()
     difficulty = choose_difficulty()
     player_board = board_init(difficulty, player_name)
-    computer_board = board_init(difficulty, "Computer")
     player_board.print_board()
-    computer_board.print_board()
+    computer_board = board_init(difficulty, "Computer")
     place_ships(difficulty, player_board)
-    fire_missile(player_board, list_ship_coords)
-    # computer_board.print_board()
-    # computer_board.update_board(guess, *)
+    generate_ships(difficulty, computer_board)
+    turn(player_board, computer_board)
 
 
 game_loop()
