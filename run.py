@@ -14,7 +14,6 @@ class Ship():
             self.orientation = orientation
         else:
             raise ValueError("Value must be 'h' or 'v'.")
-
         self.start = start_coord
 
     def get_coords(self, board_size):
@@ -93,20 +92,20 @@ class Board():
 
         print(f"{self.name}'s board updated")
 
-    def check_hit(self, ship_coords, guess_coords, used, data_set):
-        try:
-            if guess_coords in used:
-                print("\nYou guessed that one already.")
-            else:
-                if guess_coords in ship_coords:
-                    self.update_board([guess_coords], 'X')
-                    print("Hit!")
-                    data_set.remove(guess_coords)
-                else:
-                    self.update_board([guess_coords], 'O')
-                    print("Miss!")
-        except ValueError:
-            print("failure")
+    def check_hit(self, guess_coords, data_set):
+        """
+        Checks if missile (gueess_coords) hits
+        enemy ship.
+        Updates the board with visual marker and
+        if missile hits, remove ship coordinate.
+        """
+        if guess_coords in data_set:
+            self.update_board([guess_coords], 'X')
+            print("Hit!")
+            data_set.remove(guess_coords)
+        else:
+            self.update_board([guess_coords], 'O')
+            print("Miss!")
 
 
 def clear_term():
@@ -157,6 +156,7 @@ def choose_difficulty():
 
             difficulty_options = ("e", "m", "h")
             if difficulty in difficulty_options:
+                clear_term()
                 return difficulty
             else:
                 print("Sorry, that's not an accepted value! Please try again")
@@ -178,8 +178,6 @@ def board_init(difficulty, name):
     elif difficulty == "h":
         generated_board = Board(9, name)
         return generated_board
-    else:
-        print("Error")
 
 
 def place_ships(difficulty, board):
@@ -288,10 +286,6 @@ def get_guess(board):
     return guess
 
 
-list_ship_coords = []
-comp_list_ship_coords = []
-
-
 def get_ship_info(board, boat_size, boat_name):
     """
     Creates instances of Ship Class.
@@ -306,6 +300,7 @@ def get_ship_info(board, boat_size, boat_name):
         try:
             orientation_guess = get_orientation()
             guess = get_guess(board)
+            clear_term()
             board_size = board.size
             ship = Ship(boat_size, orientation_guess, guess, boat_name)
             instance_coords = ship.get_coords(board_size)
@@ -320,32 +315,45 @@ def get_ship_info(board, boat_size, boat_name):
             print("Try again")
 
 
-guessed_values = []
-comp_guessed_values = []
-
-
-def fire_missile(board, ship_coords, data_set, missile_coords, guessed):
-    board.check_hit(ship_coords, missile_coords, guessed, data_set)
+def fire_missile(board, data_set, missile_coords, guessed):
+    """
+    Sends the missile coordinates to the check_hit method
+    for the appropriate board.
+    Updates the appropriate list of guessed values.
+    Takes ship_coords of enemy ships.
+    """
+    board.check_hit(missile_coords, data_set)
     guessed.append(missile_coords)
     board.print_board()
-    print(data_set)
-    print(guessed)
 
 
 def turn(player_board, computer_board):
+    """
+    Checks if there are filled coordinates left
+    for player to hit, starts turn, checks same
+    for computer, calls computer turn.
+    Repeats until either list is empty.
+    """
     while True:
         if comp_list_ship_coords:
-            player_turn(computer_board, comp_list_ship_coords)
+            player_turn(computer_board)
             if list_ship_coords:
-                comp_turn(player_board, list_ship_coords)
+                comp_turn(player_board)
             else:
                 print("Computer Wins")
+                break
         else:
             print("Player Wins")
             break
 
 
-def player_turn(board, ship_coords):
+def player_turn(board):
+    """
+    Funtion to get missile guess from player.
+    Checks for duplicate guess and re-prompts
+    player.
+    Takes ship_coords to pass to check_hit.
+    """
     while True:
         try:
             coord = get_guess(board)
@@ -353,7 +361,7 @@ def player_turn(board, ship_coords):
             if coord in guessed_values:
                 raise IndexError
             else:
-                fire_missile(board, ship_coords, comp_list_ship_coords, coord,
+                fire_missile(board, comp_list_ship_coords, coord,
                              guessed_values)
                 break
         except IndexError:
@@ -361,7 +369,12 @@ def player_turn(board, ship_coords):
             print("Try again")
 
 
-def comp_turn(board, ship_coords):
+def comp_turn(board):
+    """
+    Funtion to automate the computers guess.
+    Checks for duplicate guess and retries until
+    unique coords are found.
+    """
     while True:
         try:
             data = random_parameters(board)
@@ -369,7 +382,7 @@ def comp_turn(board, ship_coords):
             if coord in comp_guessed_values:
                 raise IndexError
             else:
-                fire_missile(board, ship_coords, list_ship_coords, coord,
+                fire_missile(board, list_ship_coords, coord,
                              comp_guessed_values)
                 break
         except IndexError:
@@ -377,6 +390,11 @@ def comp_turn(board, ship_coords):
 
 
 def random_parameters(board):
+    """
+    Function to randomly generate positional parameters
+    for computer ships.
+    Board param taken to get access to instance variables.
+    """
     orientation = 'h' if randint(0, 1) == 0 else 'v'
     coords = (randint(0, board.size - 1), randint(0, board.size - 1))
     return orientation, coords
@@ -439,6 +457,13 @@ def generate_ships(difficulty, board):
         generate_coords(board, 1, 'Jeff')
     else:
         print("Error")
+
+
+#  global lists
+guessed_values = []
+comp_guessed_values = []
+list_ship_coords = []
+comp_list_ship_coords = []
 
 
 def game_loop():
