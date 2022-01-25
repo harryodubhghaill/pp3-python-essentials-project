@@ -121,7 +121,7 @@ def print_start():
     Prints stylized strings introducing the game to terminal.
     """
     print(("~"*50)+"\n"+("~"*50))
-    print("~~~~~~     WELCOME TO BATTLESHIP ROYAL      ~~~~~~")
+    print("~~~~~~     WELCOME TO BATTLESHIP ROYALE     ~~~~~~")
     print("~~  OBJECTIVE: TOTAL DESTRUCTION OF YOUR ENEMY  ~~")
     print(("~"*50)+"\n"+("~"*50))
     print("~~~**   HOW TO PLAY   **~~~")
