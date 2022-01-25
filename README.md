@@ -4,7 +4,7 @@ Battleship Royale is a Python terminal based game, that users can play and contr
 
 Based on the original Battleship board game, players will fire missiles at their opponents ships in n attempt to sink them all before the enemy sinks all of theirs.
 
-<img src="assets/images/readme/am-i-responsive-quizzical-min.PNG">
+<img src="readme_images/banner.PNG">
 
 ## Gameplay
 <hr>
@@ -33,7 +33,7 @@ The winner is the last one standing.
   - Allows users to easily choose their desired difficulty.
   - Changes the size of the board and the number of ships in play.
   
-  <img src="assets/images/readme/start-page-min.PNG">
+  <img src="readme_images/input.PNG">
 
 - __User Input__
 
@@ -41,21 +41,21 @@ The winner is the last one standing.
   - Allows user to personalise the game with their name.
   - Most fields only requre a single character, making gameplay much faster.
   
-  <img src="assets/images/readme/rules-min.PNG">
+  <img src="readme_images/guess.PNG">
 
 - __Input Validation__
 
     - Each input instance is passed through an approprite validation sequence to ensure we send the correct data to the correct place.
     - Certain checks will ask the player to repeat the input until a valid value is passed through.
 
-<img src="assets/images/readme/quiz-page-min.PNG">
+<img src="readme_images/check.PNG">
+<img src="readme_images/check2.PNG">
+<img src="readme_images/check3.PNG">
 
 - __Automated Opponent__
 
     - The computer opponent is fully automated and will perform all necesary game tasks without player interference.
     - This adds replayability and will keep users engaged for more than one game.
-
-<img src="assets/images/readme/question-answers-min.PNG">
 
 ### Features left to Implement
 
