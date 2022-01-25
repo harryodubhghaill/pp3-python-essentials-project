@@ -326,6 +326,9 @@ def fire_missile(board, data_set, missile_coords, guessed):
 
 
 def restart_game():
+    """
+    Restarts the game.
+    """
     input("Press enter to restart")
     game_loop()
 

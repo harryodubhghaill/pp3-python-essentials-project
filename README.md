@@ -57,92 +57,46 @@ The winner is the last one standing.
 
 <img src="assets/images/readme/question-answers-min.PNG">
 
-- __Score Counter__ 
-
-  - The score counter is displayed on screen and will increment by 1 on every correct answer.
-  - This allows a winning score to be set and also indicates user performance.
-
-<img src="assets/images/readme/score-min.PNG">
-
-- __Lives Counter__ 
-
-  - The lives counter is displayed on screen and will decrement by 1 on every incorrect answer.
-  - The lives are set to 3 by default and will stop the game if the user has lost all 3.
-
-<img src="assets/images/readme/lives-min.PNG">
-
-- __Message and Next Question__
-
-    - This will show the correct conditional message depending on the users answer after they have selected their answer.
-    - A button to continue the game is also displayed. Pushing this will advance to the next question.
-
-<img src="assets/images/readme/correct-answer-min.PNG">
-<img src="assets/images/readme/wrong-answer-min.PNG">
-
-- __End Game Screen__
-
-    - This appears if either of 2 conditions (game win or game lose) are met and will display the game result to the user.
-    - There is also a restart button for the user to press if they would like to start the game again.
-
-<img src="assets/images/readme/you-win-min.PNG">
-<img src="assets/images/readme/loser-min.PNG">
-
 ### Features left to Implement
 
-    - Difficulty Selection.
-    - Selectable Trivia Categories.
-    - Multiple Rounds.
-    - Username and Scoreboard.
+    - Score tracking.
+    - 2 player vs mode.
+    - "You sunk my..." message on complete removal of ship.
 
 ### Technology Used 
 
     - Github
     - Gitpod
-    - HTML 5
-    - CSS 3
-    - JavaScript
+    - Heroku
+    - Python
 
 ## Testing
 
 <hr>
 
-Manual testing was done through devices I own and included my laptop, phone and tablet. I also tested the website on popular web browsers on my windows laptop. These included Chrome, Firefox, Edge, Opera and Safari.
-
-A Lighthouse test was performed in Chrome dev tools for performance and accessibility.
-
-<img src="assets/images/readme/lighthouse-result-min.PNG">
-
-### Validator Testing
-
-- HTML
-  - No errors were returned when passing through the official [W3C validator](https://validator.w3.org/nu/?doc=https%3A%2F%2Fharryodubhghaill.github.io%2Fjavascript-essentials-portfolio-project%2F).
-- CSS
-  - No errors were found when passing through the official [Jigsaw validator](https://jigsaw.w3.org/css-validator/validator?uri=https%3A%2F%2Fharryodubhghaill.github.io%2Fjavascript-essentials-portfolio-project%2F&profile=css3svg&usermedium=all&warning=1&vextwarning=&lang=en).
-- JavaScript
-  - No errors were returned when passing through [JSHint](https://jshint.com/).
+- Manual testing was done through devices I own and included my laptop, phone and tablet. I also tested the      deployed app on popular web browsers on my windows laptop. These included Chrome, Firefox, Edge, Opera and  Safari.
+- Passed code through a PEP8 linter and it returned no issues.
+- Gave invalid inputs, ints when strings are expected, numbers outside of range etc...
 
 ## Deployment
 
 <hr>
 
-- The site was deployed to GitHub pages. The steps to deploy are as follows: 
-  - In the GitHub repository, navigate to the Settings tab 
-  - From the source section drop-down menu, select the Main Branch
-  - Once the Main Branch has been selected, the page will be automatically refreshed with a detailed ribbon   display to indicate the successful deployment. 
+- The site was deployed using Heroku and Code Institute's mock terminal. The steps to deploy are as follows: 
+  - Fork this repo.
+  - Create a new Heroku app
+  - Add config var with KEY = PORT and VALUE = 8000
+  - Set the buildpacks in the "Settings" section to heroku/python and heroku/nodejs in that order.
+  - In the "Deploy" section, link the Heroku app to the Git repo.
+  - Click on Deploy
 
-The live link can be found here - https://harryodubhghaill.github.io/javascript-essentials-portfolio-project/
+The live link can be found here - https://extreme-battleship-cipp3-hd.herokuapp.com/
 
 
 ## Credits 
 
 <hr>
 
-### Code 
-
-- API implimentation info came from Youtube channel ["The Coding Train"](https://www.youtube.com/watch?v=uxf0--uiX0I&t=835s).
-
-### Media
-
-- Questions are from an open source API [Open Trivia Database](https://opentdb.com/).
-- Favicon was found here [Favicon](https://www.flaticon.com/free-icons/quiz).
-- Fonts were sourced from [Google Fonts](https://fonts.google.com/).
+- Code Institute for the Heroku terminal
+- Stack Overflow for help with data itteration questions.
+- Stack Overflow for info on od.system and clearing the interpreter
