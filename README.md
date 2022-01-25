@@ -99,4 +99,4 @@ The live link can be found here - https://extreme-battleship-cipp3-hd.herokuapp.
 
 - Code Institute for the Heroku terminal
 - Stack Overflow for help with data itteration questions.
-- Stack Overflow for info on od.system and clearing the interpreter
+- Stack Overflow for info on os.system and clearing the interpreter
