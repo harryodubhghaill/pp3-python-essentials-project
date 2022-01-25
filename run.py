@@ -214,7 +214,7 @@ def place_ships(difficulty, board):
         board.update_board(patrol_boat_coords, '@')
         board.print_board()
         rescue_boat_coords = get_ship_info(board, 2, 'Rescue Boat')
-        board.update_board(patrol_boat_coords, '@')
+        board.update_board(rescue_boat_coords, '@')
         board.print_board()
         scuba_spy_coords = get_ship_info(board, 1, 'Jeff')
         board.update_board(scuba_spy_coords, '@')
@@ -325,6 +325,11 @@ def fire_missile(board, data_set, missile_coords, guessed):
     board.print_board()
 
 
+def restart_game():
+    input("Press enter to restart")
+    game_loop()
+
+
 def turn(player_board, computer_board):
     """
     Checks if there are filled coordinates left
@@ -339,9 +344,11 @@ def turn(player_board, computer_board):
                 comp_turn(player_board)
             else:
                 print("Computer Wins")
+                restart_game()
                 break
         else:
             print("Player Wins")
+            restart_game()
             break
 
 
@@ -365,6 +372,7 @@ def player_turn(board):
                              guessed_values)
                 break
         except IndexError:
+            clear_term()
             print("You Picked that one already")
             print("Try again")
 
@@ -467,6 +475,9 @@ comp_list_ship_coords = []
 
 
 def game_loop():
+    """
+    Calls all game functions in order.
+    """
     game_init()
     player_name = get_name()
     difficulty = choose_difficulty()
