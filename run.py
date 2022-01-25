@@ -53,7 +53,7 @@ class Board():
         self.size = size
         self.name = name
 
-        self.title = f"\n{self.name}'s board"
+        self.title = f"{self.name}'s board"
 
         # creates styled line to print
         self.board = [["~"] * self.size for x in range(self.size)]
@@ -79,7 +79,7 @@ class Board():
                 if guess in range(1, self.size + 1):
                     return guess - 1
                 else:
-                    print("\nOops, that's not even in the ocean.")
+                    print("\nAhh now, you'll never win the war from there")
             except ValueError:
                 print("\nPlease enter a number")
 
@@ -90,8 +90,6 @@ class Board():
         for coord in guess:
             self.board[coord[0]][coord[1]] = f'{symbol}'
 
-        print(f"{self.name}'s board updated")
-
     def check_hit(self, guess_coords, data_set):
         """
         Checks if missile (gueess_coords) hits
@@ -101,11 +99,11 @@ class Board():
         """
         if guess_coords in data_set:
             self.update_board([guess_coords], 'X')
-            print("Hit!")
+            print(f"\n{self.name}'s ship was hit!")
             data_set.remove(guess_coords)
         else:
             self.update_board([guess_coords], 'O')
-            print("Miss!")
+            print(f"\n{self.name} avoided disaster!")
 
 
 def clear_term():
@@ -256,7 +254,7 @@ def get_orientation():
     Checks user input and returns orientation value.
     """
     print("\nChoose Ship Orientation.")
-    print("\nType 'h' for horizontal or 'v' for vertical.\n")
+    print("\nType 'h' for horizontal or 'v' for vertical.")
     while True:
         try:
             orientation = input("Select Orientation: ")
@@ -294,8 +292,8 @@ def get_ship_info(board, boat_size, boat_name):
     Checks for occupied cells.
     If instance coordinates unique, return instance coordinates.
     """
-    print(f"Place your {boat_name}.")
-    print(f"Your {boat_name} is {boat_size} units long.")
+    print(f"\nPlace {boat_name}.")
+    print(f"{boat_name} is {boat_size} units long.")
     while True:
         try:
             orientation_guess = get_orientation()
@@ -356,6 +354,8 @@ def player_turn(board):
     """
     while True:
         try:
+            print("Ready the torpedos!")
+            print("Where we sending this one, boss?")
             coord = get_guess(board)
             clear_term()
             if coord in guessed_values:
