@@ -18,24 +18,24 @@ class Ship():
 
     def get_coords(self, board_size):
         if self.orientation == 'h':
-            if self.start['row'] in range(board_size):
+            if self.start[0] in range(board_size):
                 coordinates = []
                 for index in range(self.boat_size):
-                    if self.start['col'] + index in range(board_size):
-                        coordinates.append({'row': self.start['row'],
-                                            'col': self.start['col'] + index})
+                    if self.start[1] + index in range(board_size):
+                        coordinates.append((self.start[0],
+                                            self.start[1] + index))
                     else:
                         raise IndexError("Column is out of range.")
                 return coordinates
             else:
                 raise IndexError("Row is out of range.")
         elif self.orientation == 'v':
-            if self.start['col'] in range(board_size):
+            if self.start[1] in range(board_size):
                 coordinates = []
                 for index in range(self.boat_size):
-                    if self.start['row'] + index in range(board_size):
-                        coordinates.append({'row': self.start['row'] + index,
-                                            'col': self.start['col']})
+                    if self.start[0] + index in range(board_size):
+                        coordinates.append((self.start[0] + index,
+                                            self.start[1]))
                     else:
                         raise IndexError("Row is out of range.")
                 return coordinates
@@ -88,20 +88,26 @@ class Board():
         """
         Takes guess and updates board to reflect.
         """
+        print(guess)
         for coord in guess:
-            self.board[coord['row']][coord['col']] = f'{symbol}'
+            print(coord)
+            self.board[coord[0]][coord[1]] = f'{symbol}'
 
         print(f"{self.name}'s board updated")
 
-    def check_hit(self, ship_coords, guess_coords):
-        if guess_coords in ship_coords:
-            self.update_board(guess_coords, 'X')
-            print("Hit!")
+    def check_hit(self, ship_coords, guess_coords, used):
+        if guess_coords in used:
+            print("\nYou guessed that one already.")
         else:
-            self.update_board(guess_coords, 'O')
-            print("Miss!")
+            if guess_coords in ship_coords:
+                self.update_board([guess_coords], 'X')
+                print("Hit!")
+                list_ship_coords.remove(guess_coords)
+            else:
+                self.update_board([guess_coords], 'O')
+                print("Miss!")
 
-        print(guess_coords)
+            print(guess_coords)
 
 
 # utility function to clear terminal
@@ -117,8 +123,7 @@ def print_start():
     print("~~~~~~     WELCOME TO BATTLESHIP ROYAL      ~~~~~~")
     print("~~  OBJECTIVE: TOTAL DESTRUCTION OF YOUR ENEMY  ~~")
     print(("~"*50)+"\n"+("~"*50))
-    print("** HOW TO PLAY **/n")
-    print("Type your name into the field below")
+    print("~~~**   HOW TO PLAY   **~~~")
     print("Select your Difficulty")
     print("Place your ships")
     print("Fire missiles at your opponents ships")
@@ -132,7 +137,7 @@ def get_name():
 
 
 def choose_difficulty():
-    print("\nChoose your difficulty!\n")
+    print("\nChoose your difficulty!")
     print("\nEnter 'e' for Easy, 'm' for Medium, 'h' for Hard\n")
 
     while True:
@@ -170,12 +175,12 @@ def place_ships(difficulty, board):
         destroyer_coords = get_ship_info(board, 3, 'Destroyer')
         board.update_board(destroyer_coords, '@')
         board.print_board()
-        patrol_boat_coords = get_ship_info(board, 2, 'Patrol Boat')
-        board.update_board(patrol_boat_coords, '@')
-        board.print_board()
-        scuba_spy_coords = get_ship_info(board, 1, 'Jeff')
-        board.update_board(scuba_spy_coords, '@')
-        board.print_board()
+        # patrol_boat_coords = get_ship_info(board, 2, 'Patrol Boat')
+        # board.update_board(patrol_boat_coords, '@')
+        # board.print_board()
+        # scuba_spy_coords = get_ship_info(board, 1, 'Jeff')
+        # board.update_board(scuba_spy_coords, '@')
+        # board.print_board()
     elif difficulty == "m":
         battleship_coords = get_ship_info(board, 5, 'Battleship')
         board.update_board(battleship_coords, '@')
@@ -237,7 +242,7 @@ def game_init():
 def get_guess(board):
     row_guess = board.coords_guess("Row")
     col_guess = board.coords_guess("Column")
-    guess = {'row': row_guess, 'col': col_guess}
+    guess = (row_guess, col_guess)
     return guess
 
 
@@ -255,15 +260,31 @@ def get_ship_info(board, boat_size, boat_name):
             ship = Ship(boat_size, orientation_guess, guess, boat_name)
             instance_coords = ship.get_coords(board_size)
             for instance_coord in instance_coords:
-                unpacked_coord = instance_coord['row'], instance_coord['col']
-                if unpacked_coord in list_ship_coords:
+                if instance_coord in list_ship_coords:
                     raise IndexError
                 else:
-                    list_ship_coords.append(unpacked_coord)
+                    list_ship_coords.append(instance_coord)
             return instance_coords
         except IndexError:
             print("Your ship aint gonna fit there bud")
             print("Try again")
+
+
+guessed_values = []
+
+
+def fire_missile(board, ship_coords):
+    while True:
+        if ship_coords:
+            print(ship_coords)
+            coord = get_guess(board)
+            board.check_hit(ship_coords, coord, guessed_values)
+            guessed_values.append(coord)
+            board.print_board()
+            print(ship_coords)
+        else:
+            print("game over")
+            break
 
 
 def game_loop():
@@ -275,18 +296,9 @@ def game_loop():
     player_board.print_board()
     computer_board.print_board()
     place_ships(difficulty, player_board)
-
-    # coord = get_guess(computer_board)
-    # computer_board.check_hit(carrier_coords, coord)
+    fire_missile(player_board, list_ship_coords)
     # computer_board.print_board()
     # computer_board.update_board(guess, *)
-    # computer_board.print_board()
-    # player_logic_board = player_board.get_logic_board()
-    # computer_logic_board = computer_board.get_logic_board()
-    # print(player_logic_board)
-    # print(computer_logic_board)
-    # player_logic_board.update_ship(guess)
-    # print(player_logic_board)
 
 
 game_loop()
